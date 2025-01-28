@@ -12,7 +12,7 @@ export class EnergyService {
     private energyIdDataModel: Model<EnergyIdData>,
   ) {}
 
-  async getEnergyDid(): Promise<any> {
+  async getEnergyDid(ip: string): Promise<any> {
     const mySeedPhrase = generateSeedPhrase();
 
     // Eg. ed25519:2htvg4kn2Ps6NHiUaismbx6Zu1ZmnQm1Jx2kb2yyDedaawcPLZfcv4djc8BCxiutdHjPJZNUwoHyrmqwo5gYyEFv
@@ -25,6 +25,7 @@ export class EnergyService {
       did: did.toJSON(),
       credential: JSON.stringify(credential),
       privateInfo: mySeedPhrase,
+      requestIp: ip,
     });
 
     await newEnergyIdData.save();

@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Ip, UseGuards } from '@nestjs/common';
 import { EnergyService } from './energy.service';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -8,7 +8,7 @@ export class EnergyController {
 
   @Get()
   @UseGuards(AuthGuard('basic'))
-  getEnergyDid(): any {
-    return this.energyService.getEnergyDid();
+  getEnergyDid(@Ip() ip): any {
+    return this.energyService.getEnergyDid(ip);
   }
 }

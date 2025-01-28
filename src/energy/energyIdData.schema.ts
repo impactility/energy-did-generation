@@ -18,6 +18,9 @@ export class EnergyIdData extends Document {
 
   @Prop({ required: true, default: Date.now })
   created_at: Date;
+
+  @Prop({ required: false })
+  requestIp: string;
 }
 
 export const EnergyIdDataSchema = SchemaFactory.createForClass(EnergyIdData);
