@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { EnergyModule } from './energy/energy.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   controllers: [AppController],
@@ -15,6 +16,7 @@ import { DatabaseModule } from './database/database.module';
       isGlobal: true,
     }),
     DatabaseModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

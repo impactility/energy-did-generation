@@ -66,8 +66,6 @@ export type NetworkConfig = {
 const circuitsFolder = process.env.CIRCUITS_PATH as string;
 const mongoDbConnection = process.env.MONGO_DB_CONNECTION as string;
 
-console.log('circuitsFolder', circuitsFolder);
-
 export function initInMemoryDataStorage({
   contractAddress,
   rpcUrl,
