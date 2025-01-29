@@ -26,6 +26,13 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Project Config
+
+- Add Method & Blockchain to following file.
+  `node_modules/@iden3/js-iden3-core/dist/node/cjs/constants.js`
+- [exports.DidMethod.Energy]: 0b00000100 ,
+- [`${exports.Blockchain.EnergyWeb}:${exports.NetworkId.Volta}`]: 64 | 2
+
 ## Project setup
 
 ```bash
