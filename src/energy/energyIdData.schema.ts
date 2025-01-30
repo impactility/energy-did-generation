@@ -21,6 +21,12 @@ export class EnergyIdData extends Document {
 
   @Prop({ required: false })
   requestIp: string;
+
+  @Prop({ required: true, enum: ['User', 'Battery'] })
+  issuedFor: string;
+
+  @Prop({ required: false })
+  cobaltPUniqueId: string;
 }
 
 export const EnergyIdDataSchema = SchemaFactory.createForClass(EnergyIdData);
