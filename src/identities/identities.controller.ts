@@ -13,15 +13,48 @@ import { CreateIdentityDto } from './dto/create-identity.dto';
 import { UpdateIdentityDto } from './dto/update-identity.dto';
 import { CreateDIDDto } from 'src/energy/create-did.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { CreateCredentialDto } from './dto/create-credential.dto';
 
 @Controller('identities')
 @UseGuards(AuthGuard('basic'))
 export class IdentitiesController {
   constructor(private readonly identitiesService: IdentitiesService) {}
 
-  @Post()
-  create(@Body() createDIDDto: CreateDIDDto) {
-    return this.identitiesService.create(createDIDDto);
+  @Post('/')
+  createIdentities(@Body() createDIDDto: CreateDIDDto) {
+    return this.identitiesService.createIdentities(createDIDDto);
+  }
+
+  @Post('/:identifier/credentials')
+  createCredential(
+    @Param('identifier') identifier: string,
+    @Body() createCredentialDto: CreateCredentialDto,
+  ) {
+    return this.identitiesService.createCredential(
+      identifier,
+      createCredentialDto,
+    );
+  }
+
+  @Get('/:identifier/credentials')
+  getCredentials(@Param('identifier') identifier: string) {
+    return this.identitiesService.getCredentials(identifier);
+  }
+
+  @Post('/:identifier/credentials/revoke/:nonce')
+  revokeCredential(
+    @Param('identifier') identifier: string,
+    @Param('nonce') nonce: string,
+  ) {
+    return this.identitiesService.revokeCredential(identifier, nonce);
+  }
+
+  @Get('/:identifier/credentials/:id')
+  getCredential(
+    @Param('identifier') identifier: string,
+    @Param('id') id: string,
+  ) {
+    return this.identitiesService.getCredential(identifier, id);
   }
 
   @Get()
