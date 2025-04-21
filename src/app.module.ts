@@ -5,6 +5,7 @@ import { EnergyModule } from './energy/energy.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
+import { IdentitiesModule } from './identities/identities.module';
 
 @Module({
   controllers: [AppController],
@@ -17,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     DatabaseModule,
     AuthModule,
+    IdentitiesModule,
   ],
 })
 export class AppModule {}

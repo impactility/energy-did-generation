@@ -2,7 +2,6 @@ import { Body, Controller, Ip, Post, UseGuards } from '@nestjs/common';
 import { EnergyService } from './energy.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateDIDDto } from './create-did.dto';
-import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 
 @Controller('energy')
 export class EnergyController {

@@ -13,9 +13,9 @@ export class EnergyService {
   ) {}
 
   async getEnergyDid(
-    ip: string,
     issuedFor: string,
     cobaltPUniqueId: string,
+    ip?: string,
   ): Promise<any> {
     try {
       const mySeedPhrase = generateSeedPhrase();

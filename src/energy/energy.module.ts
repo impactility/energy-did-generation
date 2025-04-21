@@ -18,5 +18,6 @@ import { AuthModule } from 'src/auth/auth.module';
   ],
   controllers: [EnergyController],
   providers: [EnergyService],
+  exports: [EnergyService],
 })
 export class EnergyModule {}
