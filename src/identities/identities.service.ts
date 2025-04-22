@@ -1,5 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
-// import { UpdateIdentityDto } from './dto/update-identity.dto';
+import { UpdateIdentityDto } from './dto/update-identity.dto';
 import { EnergyService } from '../energy/energy.service';
 import { CreateDIDDto, IssuedFor } from 'src/energy/create-did.dto';
 import { axiosClient } from './axios-client';
@@ -126,9 +126,10 @@ export class IdentitiesService {
     return `This action returns a #${id} identity`;
   }
 
-  // update(id: number, updateIdentityDto: UpdateIdentityDto) {
-  //   return `This action updates a #${id} identity`;
-  // }
+  update(id: number, updateIdentityDto: UpdateIdentityDto) {
+    console.log('updateIdentityDto', updateIdentityDto);
+    return `This action updates a #${id} identity`;
+  }
 
   remove(id: number) {
     return `This action removes a #${id} identity`;
