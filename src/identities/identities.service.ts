@@ -12,7 +12,7 @@ export class IdentitiesService {
     if (createDIDDto.issuedFor === IssuedFor.Battery) {
       return this.energyService
         .getEnergyDid(createDIDDto.issuedFor, createDIDDto.cobaltPUniqueId)
-        .then((response) => response.data)
+        .then((response) => response)
         .catch((error) => {
           const errorMessage =
             error.response?.data?.message ||
