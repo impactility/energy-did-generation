@@ -10,10 +10,20 @@ export class IdentitiesService {
 
   createIdentities(createDIDDto: CreateDIDDto) {
     if (createDIDDto.issuedFor === IssuedFor.Battery) {
-      return this.energyService.getEnergyDid(
-        createDIDDto.issuedFor,
-        createDIDDto.cobaltPUniqueId,
-      );
+      return this.energyService
+        .getEnergyDid(createDIDDto.issuedFor, createDIDDto.cobaltPUniqueId)
+        .then((response) => response.data)
+        .catch((error) => {
+          const errorMessage =
+            error.response?.data?.message ||
+            error.message ||
+            'Unknown error occurred';
+          console.error('Error calling identities API:', errorMessage);
+          throw new HttpException(
+            `Failed to create identity for battery. Error : ${errorMessage}`,
+            error.response?.status || 500,
+          );
+        });
     } else if (createDIDDto.issuedFor === IssuedFor.User) {
       return axiosClient
         .post('/v2/identities', {
