@@ -1,106 +1,368 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+![EnergyID Logo](energyid-logo.svg)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Energy DID Generation Service
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+A NestJS-based microservice for generating and managing Decentralized Identifiers (DIDs) on the Energy Web Chain. This service enables the creation of DIDs for batteries and users, along with credential issuance and management capabilities using zero-knowledge proof technology.
 
-## Description
+## Overview
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This service provides a RESTful API for:
+- Creating Energy DIDs for batteries and users
+- Issuing and managing verifiable credentials
+- Revoking credentials when needed
+- Storing DID data and credentials in MongoDB
 
-## Project Config
+The service leverages an identity SDK to create DIDs on the Energy Web Chain (Volta testnet) and supports zero-knowledge proof-based credential verification.
 
-- Add Method & Blockchain to following file.
-  `node_modules/@iden3/js-iden3-core/dist/node/cjs/constants.js`
-- [exports.DidMethod.Energy]: 0b00000100 ,
-- [`${exports.Blockchain.EnergyWeb}:${exports.NetworkId.Volta}`]: 64 | 2
+## Features
 
-## Project setup
+- ✅ **Energy DID Creation**: Generate DIDs specifically for the Energy Web Chain
+- ✅ **Dual Identity Types**: Support for both Battery and User identities
+- ✅ **Credential Management**: Issue, retrieve, and revoke verifiable credentials
+- ✅ **MongoDB Storage**: Persistent storage of DID data and credentials
+- ✅ **Basic Authentication**: Secure API endpoints with HTTP Basic Auth
+- ✅ **External Issuer Integration**: Integration with external issuer node for user identities
+- ✅ **Zero-Knowledge Proofs**: Support for ZK proofs via zero-knowledge proof circuits
 
+## Technology Stack
+
+- **Framework**: NestJS 10.x
+- **Language**: TypeScript
+- **Database**: MongoDB (via Mongoose)
+- **DID SDK**: Identity and credential management SDK
+- **Blockchain**: Energy Web Chain (Volta testnet)
+- **Authentication**: Passport HTTP Basic Strategy
+
+## Prerequisites
+
+- Node.js (v18 or higher recommended)
+- MongoDB (local instance or connection string)
+- npm or yarn package manager
+- Access to Energy Web Chain Volta testnet RPC endpoint
+
+## Installation
+
+1. Clone the repository:
 ```bash
-$ npm install
+git clone https://github.com/impactility/energy-did-generation
+cd energy-did-generation
 ```
 
-## Compile and run the project
-
+2. Install dependencies:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
-
+3. Configure environment variables:
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cp .env.sample .env
 ```
 
-## Deployment
+4. Edit `.env` file with your configuration (see [Configuration](#configuration) section)
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+5. **Important**: Configure the identity SDK for Energy Web Chain:
+   
+   Add the following to `node_modules/@iden3/js-iden3-core/dist/node/cjs/constants.js`:
+   ```javascript
+   exports.DidMethod.Energy = 0b00000100;
+   exports[`${exports.Blockchain.EnergyWeb}:${exports.NetworkId.Volta}`] = 64 | 2;
+   ```
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Configuration
 
-```bash
-$ npm install -g mau
-$ mau deploy
+Create a `.env` file in the root directory with the following variables:
+
+```env
+# Server Configuration
+PORT=6000
+
+# Reverse Hash Service (RHS) URL for credential revocation
+RHS_URL="https://rhs-staging.polygonid.me"
+
+# Energy Web Chain Configuration
+CONTRACT_ADDRESS="0xfFB6F669c85Add1cd87072828579bF56DD3a2110"
+RPC_URL="https://volta-rpc.energyweb.org"
+CHAIN_ID="73799"
+
+# Wallet Configuration
+WALLET_KEY="<your-wallet-private-key-in-hex>"
+
+# MongoDB Configuration
+MONGO_DB_CONNECTION="mongodb://127.0.0.1:27017/adi-db?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.8"
+
+# Circuit Files Path
+CIRCUITS_PATH="./circuits"
+
+# Basic Authentication
+BASIC_AUTH_USER=<your-username>
+BASIC_AUTH_PASS=<your-password>
+
+# External Issuer Node Configuration (for user identities)
+ISSUER_NODE_URL=http://localhost:3001
+ISSUER_API_AUTH_USER=<issuer-username>
+ISSUER_API_AUTH_PASSWORD=<issuer-password>
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Circuit Files
 
-## Resources
+The service requires zero-knowledge proof circuit files. These should be placed in the `circuits/` directory. The circuit files include:
+- `authV2/` - Authentication circuit
+- `credentialAtomicQueryMTPV2/` - Merkle Tree Proof circuit
+- `credentialAtomicQuerySigV2/` - Signature proof circuit
+- And other required circuits
 
-Check out a few resources that may come in handy when working with NestJS:
+## Running the Application
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Development Mode
+```bash
+npm run start:dev
+```
+
+### Production Mode
+```bash
+# Build the application
+npm run build
+
+# Run the production build
+npm run start:prod
+```
+
+### Debug Mode
+```bash
+npm run start:debug
+```
+
+## API Endpoints
+
+All endpoints require HTTP Basic Authentication.
+
+### Create Energy DID (Battery)
+
+Creates a new Energy DID for a battery device.
+
+**Endpoint**: `POST /energy`
+
+**Headers**:
+```
+Authorization: Basic <base64(username:password)>
+Content-Type: application/json
+```
+
+**Request Body**:
+```json
+{
+  "issuedFor": "Battery",
+  "cobaltPUniqueId": "unique-battery-id-123"
+}
+```
+
+**Response**:
+```json
+{
+  "did": "did:energy:volta:...",
+  "id": "...",
+  "state": {...}
+}
+```
+
+### Create Identity
+
+Creates a new identity (for users or batteries).
+
+**Endpoint**: `POST /v2/identities`
+
+**Headers**:
+```
+Authorization: Basic <base64(username:password)>
+Content-Type: application/json
+```
+
+**Request Body**:
+```json
+{
+  "issuedFor": "User",  // or "Battery"
+  "cobaltPUniqueId": "unique-id-123"
+}
+```
+
+**Response**: Identity object with DID information
+
+### Create Credential
+
+Issues a verifiable credential for an identity.
+
+**Endpoint**: `POST /v2/identities/:identifier/credentials`
+
+**Headers**:
+```
+Authorization: Basic <base64(username:password)>
+Content-Type: application/json
+```
+
+**Request Body**:
+```json
+{
+  "credentialSchema": "https://example.com/schema.json",
+  "credentialSubject": {
+    "id": "did:energy:volta:...",
+    "property1": "value1",
+    "property2": "value2"
+  },
+  "mtProof": true,
+  "signatureProof": true,
+  "type": "EnergyCredential"
+}
+```
+
+**Response**: Created credential object
+
+### Get Credentials
+
+Retrieves all credentials for an identity.
+
+**Endpoint**: `GET /v2/identities/:identifier/credentials`
+
+**Headers**:
+```
+Authorization: Basic <base64(username:password)>
+```
+
+**Response**: Array of credential objects
+
+### Get Specific Credential
+
+Retrieves a specific credential by ID.
+
+**Endpoint**: `GET /v2/identities/:identifier/credentials/:id`
+
+**Headers**:
+```
+Authorization: Basic <base64(username:password)>
+```
+
+**Response**: Credential object
+
+### Revoke Credential
+
+Revokes a credential by nonce.
+
+**Endpoint**: `POST /v2/identities/:identifier/credentials/revoke/:nonce`
+
+**Headers**:
+```
+Authorization: Basic <base64(username:password)>
+```
+
+**Response**: Revocation confirmation
+
+## Project Structure
+
+```
+energy-did-generation/
+├── src/
+│   ├── auth/                 # Authentication module (Basic Auth)
+│   ├── database/             # Database configuration
+│   ├── energy/               # Energy DID service and controller
+│   │   ├── energy.service.ts
+│   │   ├── energy.controller.ts
+│   │   ├── identity.ts       # DID creation logic
+│   │   ├── walletSetup.ts    # Wallet and storage initialization
+│   │   └── energyIdData.schema.ts  # MongoDB schema
+│   ├── identities/           # Identity management service
+│   │   ├── identities.service.ts
+│   │   ├── identities.controller.ts
+│   │   └── dto/              # Data Transfer Objects
+│   ├── app.module.ts         # Root module
+│   └── main.ts               # Application entry point
+├── circuits/                 # Zero-knowledge proof circuit files
+├── dist/                     # Compiled JavaScript files
+├── test/                     # E2E tests
+└── package.json
+```
+
+## Data Models
+
+### EnergyIdData Schema
+
+Stored in MongoDB:
+- `did`: The generated DID string
+- `credential`: JSON stringified credential
+- `privateInfo`: Object containing seed phrase, secret key, and public key
+- `requestIp`: IP address of the request
+- `issuedFor`: Either "User" or "Battery"
+- `cobaltPUniqueId`: Unique identifier for the entity
+- `created_at`: Timestamp of creation
+
+## Testing
+
+Run unit tests:
+```bash
+npm run test
+```
+
+Run e2e tests:
+```bash
+npm run test:e2e
+```
+
+Run tests with coverage:
+```bash
+npm run test:cov
+```
+
+## Development
+
+### Code Formatting
+```bash
+npm run format
+```
+
+### Linting
+```bash
+npm run lint
+```
+
+## How It Works
+
+1. **DID Creation for Batteries**:
+   - Generates a seed phrase using `near-seed-phrase`
+   - Extracts 32 bytes from the seed phrase for DID creation
+   - Uses the identity SDK to create an Energy DID on Volta testnet
+   - Stores the DID, credential, and private information in MongoDB
+
+2. **DID Creation for Users**:
+   - Forwards the request to an external issuer node
+   - The issuer node creates the DID with Energy Web Chain configuration
+   - Returns the created identity
+
+3. **Credential Management**:
+   - Credentials are issued through the external issuer node
+   - Supports both Merkle Tree Proofs (MTP) and Signature Proofs
+   - Credentials can be retrieved and revoked as needed
+
+## Security Considerations
+
+- All API endpoints are protected with HTTP Basic Authentication
+- Private keys and seed phrases are stored securely in MongoDB
+- The service uses the Energy Web Chain Volta testnet (not mainnet)
+- Ensure proper access control to the MongoDB database
+- Keep wallet private keys secure and never commit them to version control
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Circuit files not found**: Ensure circuit files are downloaded and placed in the `circuits/` directory
+2. **MongoDB connection errors**: Verify MongoDB is running and the connection string is correct
+3. **RPC connection errors**: Check that the Energy Web Chain RPC URL is accessible
+4. **DID creation fails**: Verify wallet has sufficient balance and the contract address is correct
 
 ## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+For issues and questions, please contact the development team.
 
-## Stay in touch
+## Acknowledgments
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- Built with [NestJS](https://nestjs.com/)
+- Uses identity and credential management SDK [iden3](https://iden3.io/)
+- Deployed on [Energy Web Chain](https://www.energyweb.org/)
