@@ -357,6 +357,11 @@ npm run lint
 3. **RPC connection errors**: Check that the Energy Web Chain RPC URL is accessible
 4. **DID creation fails**: Verify wallet has sufficient balance and the contract address is correct
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.  
+Copyright (c) 2025 Impactility
+
 ## Support
 
 For issues and questions, please contact the development team.
